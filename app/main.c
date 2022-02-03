@@ -89,7 +89,8 @@ int main(void)
                 l = dllCreate();
                 printf("Colecao criada com sucesso\n");
             }
-            else{
+            else
+            {
                 printf("Colecao ja existe\n");
             }
             system("PAUSE");
@@ -118,21 +119,48 @@ int main(void)
             system("PAUSE");
             break;
         case '3':
+
             if (l != NULL)
             {
-                printf("Entre com a matricula a ser removida: ");
-                scanf("%d", &key);
-                a = (Aluno *)dllRemoveSpec(l, (void *)&key, cmpmatr);
+                printf("Como voce quer REMOVER?\n1 - Matricula\n2 - Nome\n3 - Nota\n");
+                scanf("%d", &opc);
+                switch (opc)
+                {
+                case 1:
+                    printf("Digite a matricula: ");
+                    scanf("%d", &key);
+                    a = (Aluno *)dllRemoveSpec(l, (void *)&key, cmpmatr);
+                    break;
+                case 2:
+                    printf("Digite o nome: ");
+                    scanf("%s", &nome);
+                    a = (Aluno *)dllRemoveSpec(l, (void *)nome, cmpname);
+                    break;
+                case 3:
+                    printf("Digite a nota: ");
+                    scanf("%f", &nota);
+                    a = (Aluno *)dllRemoveSpec(l, (void *)&nota, cmpfloat);
+                    break;
+                default:
+                    break;
+                }
+
                 if (a != NULL)
                 {
-                    printf("Matricula %d Removida:\n", a->matr);
+                    printf("Matricula %d REMOVIDA!!!:\n", a->matr);
+                    printf("Nome.....: %s\n", a->name);
+                    printf("Nota.....: %.2f\n", a->nota);
                 }
                 else
                 {
                     printf("\nMatricula nao encontrada\n");
                 }
-                system("PAUSE");
             }
+            else
+            {
+                printf("Colecao nao existente\n");
+            }
+            system("PAUSE");
             break;
         case '4':
             if (l != NULL)
@@ -178,14 +206,20 @@ int main(void)
             system("PAUSE");
             break;
         case '5':
-            a = (Aluno *)getFirst(l);
-            while (a != NULL)
+            if (l != NULL)
             {
-                printf("Nome: %s\n", a->name);
-                printf("Matricula: %d\n", a->matr);
-                printf("Nota: %.2f\n", a->nota);
-                printf("---------------------------------\n");
-                a = (Aluno *)getNext(l);
+                a = (Aluno *)getFirst(l);
+                while (a != NULL)
+                {
+                    printf("Nome: %s\n", a->name);
+                    printf("Matricula: %d\n", a->matr);
+                    printf("Nota: %.2f\n", a->nota);
+                    printf("---------------------------------\n");
+                    a = (Aluno *)getNext(l);
+                }
+            }
+            else{
+                printf("Colecao nao existente\n");
             }
             system("PAUSE");
             break;
