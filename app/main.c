@@ -133,7 +133,13 @@ int main(void)
             }
             break;
         case '6':
-            dllDestroy(l);
+            if(l != NULL)
+            {
+                dllDestroy(l);
+                l = NULL;
+                printf("Colecao destruida com sucesso\n");
+                system("PAUSE");
+            }
             break;
         case '7':
             dllClearList(l);
