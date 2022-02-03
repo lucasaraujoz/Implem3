@@ -45,12 +45,29 @@ int cmpname(void *a, void *b)
     return false;
 }
 
+int cmpfloat(void *a, void *b)
+{
+    float *nota = (float *)b;
+    Aluno *al = (Aluno *)a;
+
+    if (al->nota == *nota)
+    {
+        return true;
+    }
+    return false;
+}
+
 int main(void)
 {
     DLList *l = NULL;
     Aluno *a;
-    int key, i, opc = 0;
+    int i, opc = 0;
     char op;
+
+    int key;
+    char nome[30];
+    float nota;
+
     while (1)
     {
         system("CLS");
@@ -123,8 +140,13 @@ int main(void)
                     break;
                 case 2:
                     printf("Digite o nome: ");
-                    scanf("%s", &key);
-                    a = (Aluno *)dllGetSpecData(l, (void *)&key, cmpname);
+                    scanf("%s", &nome);
+                    a = (Aluno *)dllGetSpecData(l, (void *)nome, cmpname);
+                    break;
+                case 3:
+                    printf("Digite a nota: ");
+                    scanf("%f", &nota);
+                    a = (Aluno *)dllGetSpecData(l, (void *)&nota, cmpfloat);
                     break;
                 default:
                     break;
