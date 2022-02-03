@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "dll.h"
 #include <stdbool.h>
+#include <string.h>
 
 typedef struct _aluno
 {
@@ -32,11 +33,23 @@ int cmpmatr(void *a, void *b) // (spec->data, key)
     return false;
 }
 
+int cmpname(void *a, void *b)
+{
+    char *name = (char *)b;
+    Aluno *al = (Aluno *)a;
+
+    if (strcmp(al->name, name) == 0) // ==0 quer dizer que as string sao iguais, n confundir com true ou false
+    {
+        return true;
+    }
+    return false;
+}
+
 int main(void)
 {
     DLList *l = NULL;
     Aluno *a;
-    int key, i;
+    int key, i, opc = 0;
     char op;
     while (1)
     {
@@ -99,9 +112,24 @@ int main(void)
         case '4':
             if (l != NULL)
             {
-                printf("Busque com a matricula: ");
-                scanf("%d", &key);
-                a = (Aluno *)dllGetSpecData(l, (void *)&key, cmpmatr);
+                printf("Como voce quer buscar?\n1 - Matricula\n2 - Nome\n3 - Nota\n");
+                scanf("%d", &opc);
+                switch (opc)
+                {
+                case 1:
+                    printf("Digite a matricula: ");
+                    scanf("%d", &key);
+                    a = (Aluno *)dllGetSpecData(l, (void *)&key, cmpmatr);
+                    break;
+                case 2:
+                    printf("Digite o nome: ");
+                    scanf("%s", &key);
+                    a = (Aluno *)dllGetSpecData(l, (void *)&key, cmpname);
+                    break;
+                default:
+                    break;
+                }
+
                 if (a != NULL)
                 {
                     printf("Matricula %d Encontrada:\n", a->matr);
@@ -133,7 +161,7 @@ int main(void)
             }
             break;
         case '6':
-            if(l != NULL)
+            if (l != NULL)
             {
                 dllDestroy(l);
                 l = NULL;
