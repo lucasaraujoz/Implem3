@@ -88,8 +88,11 @@ int main(void)
             {
                 l = dllCreate();
                 printf("Colecao criada com sucesso\n");
-                system("PAUSE");
             }
+            else{
+                printf("Colecao ja existe\n");
+            }
+            system("PAUSE");
             break;
         case '2':
             if (l != NULL)
@@ -114,17 +117,22 @@ int main(void)
             }
             system("PAUSE");
             break;
-        case '5':
-            a = (Aluno *)getFirst(l);
-            while (a != NULL)
+        case '3':
+            if (l != NULL)
             {
-                printf("Nome: %s\n", a->name);
-                printf("Matricula: %d\n", a->matr);
-                printf("Nota: %.2f\n", a->nota);
-                printf("---------------------------------\n");
-                a = (Aluno *)getNext(l);
+                printf("Entre com a matricula a ser removida: ");
+                scanf("%d", &key);
+                a = (Aluno *)dllRemoveSpec(l, (void *)&key, cmpmatr);
+                if (a != NULL)
+                {
+                    printf("Matricula %d Removida:\n", a->matr);
+                }
+                else
+                {
+                    printf("\nMatricula nao encontrada\n");
+                }
+                system("PAUSE");
             }
-            system("PAUSE");
             break;
         case '4':
             if (l != NULL)
@@ -162,39 +170,53 @@ int main(void)
                 {
                     printf("\nMatricula nao encontrada\n");
                 }
-                system("PAUSE");
             }
-            break;
-        case '3':
-            if (l != NULL)
+            else
             {
-                printf("Entre com a matricula a ser removida: ");
-                scanf("%d", &key);
-                a = (Aluno *)dllRemoveSpec(l, (void *)&key, cmpmatr);
-                if (a != NULL)
-                {
-                    printf("Matricula %d Removida:\n", a->matr);
-                }
-                else
-                {
-                    printf("\nMatricula nao encontrada\n");
-                }
-                system("PAUSE");
+                printf("Colecao nao existente\n");
             }
+            system("PAUSE");
+            break;
+        case '5':
+            a = (Aluno *)getFirst(l);
+            while (a != NULL)
+            {
+                printf("Nome: %s\n", a->name);
+                printf("Matricula: %d\n", a->matr);
+                printf("Nota: %.2f\n", a->nota);
+                printf("---------------------------------\n");
+                a = (Aluno *)getNext(l);
+            }
+            system("PAUSE");
             break;
         case '6':
             if (l != NULL)
             {
+                dllClearList(l);
                 dllDestroy(l);
                 l = NULL;
                 printf("Colecao destruida com sucesso\n");
-                system("PAUSE");
             }
+            else
+            {
+                printf("Colecao nao existente\n");
+            }
+            system("PAUSE");
             break;
         case '7':
-            dllClearList(l);
+            if (l != NULL)
+            {
+                dllClearList(l);
+                printf("Colecao limpa com sucesso\n");
+            }
+            else
+            {
+                printf("Colecao nao existente\n");
+            }
+            system("PAUSE");
             break;
         case '8':
+            dllClearList(l);
             dllDestroy(l);
             exit(0);
             break;
