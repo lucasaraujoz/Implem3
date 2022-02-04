@@ -8,6 +8,7 @@ typedef struct _aluno
 {
     char name[30];
     int matr;
+    int index;
     float nota;
 } Aluno;
 
@@ -27,6 +28,18 @@ int cmpmatr(void *a, void *b) // (spec->data, key)
     Aluno *al = (Aluno *)a; //{'mackele', 1004, 9}  blushing
 
     if (al->matr == *matr) //e20302403 == 1004
+    {
+        return true;
+    }
+    return false;
+}
+
+int cmpindex(void *a, void *b) // (spec->data, key)
+{
+    Aluno *newal = (Aluno *)b;
+    Aluno *al = (Aluno *)a; //{'mackele', 1004, 9}  blushing
+
+    if (al->matr == newal->matr) //e20302403 == 1004
     {
         return true;
     }
@@ -98,18 +111,22 @@ int main(void)
         case '2':
             if (l != NULL)
             {
-                for (i = 0; i < 3; i++)
+                a = (Aluno *)malloc(sizeof(Aluno));
+                printf("Digite o nome do aluno: ");
+                scanf("%s", a->name);
+                printf("Digite a matricula do aluno: ");
+                scanf("%d", &a->matr);
+                printf("Digite a nota do aluno: ");
+                scanf("%f", &a->nota);
+                if (dllInsertAsLast(l, (void *)a, cmpindex) == 1)
                 {
-                    a = (Aluno *)malloc(sizeof(Aluno));
-                    printf("Digite o nome do aluno: ");
-                    scanf("%s", a->name);
-                    printf("Digite a matricula do aluno: ");
-                    scanf("%d", &a->matr);
-                    printf("Digite a nota do aluno: ");
-                    scanf("%f", &a->nota);
-                    dllInsertAsFirst(l, (void *)a);
-                    printf("Alunos inseridos com sucesso!\n");
+                    printf("Aluno inserido com sucesso\n");
                 }
+                else
+                {
+                    printf("Erro, matricula ja existente\n");
+                }
+                // printf("Alunos inseridos com sucesso!\n");
             }
             else
             {
@@ -122,7 +139,7 @@ int main(void)
 
             if (l != NULL)
             {
-                printf("Como voce quer REMOVER?\n1 - Matricula\n2 - Nome\n3 - Nota\n");
+                printf("Como voce quer REMOVER?\n1 - Matricula\n2 - Nome\n3 - Nota\n4 - Indice\n");
                 scanf("%d", &opc);
                 switch (opc)
                 {
@@ -140,6 +157,11 @@ int main(void)
                     printf("Digite a nota: ");
                     scanf("%f", &nota);
                     a = (Aluno *)dllRemoveSpec(l, (void *)&nota, cmpfloat);
+                    break;
+                case 4:
+                    printf("Digite o indice: ");
+                    scanf("%d", &key);
+                    a = (Aluno *)dllRemoveAt(l, key);
                     break;
                 default:
                     break;
@@ -165,7 +187,7 @@ int main(void)
         case '4':
             if (l != NULL)
             {
-                printf("Como voce quer buscar?\n1 - Matricula\n2 - Nome\n3 - Nota\n");
+                printf("Como voce quer buscar?\n1 - Matricula\n2 - Nome\n3 - Nota\n4 - Indice\n");
                 scanf("%d", &opc);
                 switch (opc)
                 {
@@ -183,6 +205,11 @@ int main(void)
                     printf("Digite a nota: ");
                     scanf("%f", &nota);
                     a = (Aluno *)dllGetSpecData(l, (void *)&nota, cmpfloat);
+                    break;
+                case 4:
+                    printf("Digite o indice: ");
+                    scanf("%d", &key);
+                    a = (Aluno *)dllGetDataIndex(l, key);
                     break;
                 default:
                     break;
@@ -218,7 +245,8 @@ int main(void)
                     a = (Aluno *)getNext(l);
                 }
             }
-            else{
+            else
+            {
                 printf("Colecao nao existente\n");
             }
             system("PAUSE");

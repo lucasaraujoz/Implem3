@@ -32,17 +32,12 @@ int dllDestroy(DLList *l)
 {
     if (l != NULL)
     {
-        if (l->first == NULL) // so vazia 
+        if (l->first == NULL) // so vazia
         {
             free(l);
             return 1;
         }
     }
-    return 0;
-}
-
-int dllDestroyNotEmpty(DLList *l, int *(*myfree)(void *))
-{
     return 0;
 }
 
@@ -69,6 +64,49 @@ int dllInsertAsFirst(DLList *l, void *data)
     return 0;
 }
 
+int dllInsertAsLast(DLList *l, void *data, int (*cmp)(void *, void *))
+{
+    DLNode *newnode;
+    int stat;
+    if (l != NULL)
+    {
+        newnode = (DLNode *)malloc(sizeof(DLNode));
+        if (newnode != NULL)
+        {
+            newnode->data = data;
+            newnode->next = NULL;
+            newnode->prev = NULL;
+
+            // if list is empty
+            if (l->first == NULL)
+            {
+                l->first = newnode;
+                return 1;
+            }
+            // if list is not empty
+            DLNode *aux = l->first;
+            stat = cmp(aux->data, data);              // compare first node with new node
+            while (aux->next != NULL && stat != true) //se stat == true -> sai do loop && stat != true
+            {
+                aux = aux->next;
+                stat = cmp(aux->data, data); // compare aux node with new node
+            }
+            if (stat == true)
+            {
+                free(newnode);
+                return false;
+            }
+            if (aux->next == NULL)
+            {
+                aux->next = newnode;
+                newnode->prev = aux;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void *getFirst(DLList *l)
 {
     if (l != NULL)
@@ -93,6 +131,19 @@ void *getNext(DLList *l)
         }
     }
     return NULL;
+}
+
+void* dllGetDataIndex(DLList*l, int key){
+    //pegar por indice 
+    DLNode *aux = l->first;
+    int i = 0;
+    while(aux != NULL){
+        if(i == key){
+            return aux->data;
+        }
+        aux = aux->next;
+        i++;
+    }
 }
 
 void dllClearList(DLList *l)
@@ -134,7 +185,32 @@ void *dllGetSpecData(DLList *l, void *key, int (*cmp)(void *, void *))
     }
     return NULL;
 }
-
+void* dllRemoveAt(DLList *l, int key){
+    DLNode *aux = l->first;
+    int i = 0;
+    while(aux != NULL){
+        if(i == key){
+            if(aux->prev != NULL){
+                aux->prev->next = aux->next;
+            }
+            if(aux->next != NULL){
+                aux->next->prev = aux->prev;
+            }
+            if(aux == l->first){
+                l->first = aux->next;
+            }
+            if(aux == l->cur){
+                l->cur = aux->prev;
+            }
+            void *data = aux->data;
+            free(aux);
+            return data;
+        }
+        aux = aux->next;
+        i++;
+    }
+    return NULL;
+}
 void *dllRemoveSpec(DLList *l, void *key, int (*cmp)(void *, void *))
 {
     DLNode *spec, *prev;
